@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <baidu-map class="map" 
-    center="深圳" 
-    :zoom="zoom" 
-    :mapStyle="mapStyle"
     @ready="handler" 
+    :center="{lng: 114.407515, lat:22.705835}" 
+    :zoom="zoom"
+    max-zoom="17"
+    min-zoom="16"
     :scroll-wheel-zoom="true"
+    :mapStyle="mapStyle"
     ></baidu-map>
-
+ <!-- :mapStyle="mapStyle"  -->
   </div>
     
 </template>
@@ -15,7 +17,7 @@
   export default {
     data () {
       return {
-        zoom: 3,
+        zoom: 17,
         mapStyle:{
           styleJson:[{
             "featureType": "land",
@@ -48,19 +50,22 @@
             "featureType": "building",
             "elementType": "geometry.topfill",
             "stylers": {
-                "color": "#113549ff"
+                "color": "red"
             }
+            // #113549ff
         }, {
             "featureType": "building",
             "elementType": "geometry.sidefill",
             "stylers": {
-                "color": "#143e56ff"
+                "color": "red"
             }
+            // #143e56ff
         }, {
             "featureType": "building",
             "elementType": "geometry.stroke",
             "stylers": {
-                "color": "#dadada00"
+                "color": "red"
+                // #dadada00
             }
         }, {
             "featureType": "subwaystation",
@@ -1320,10 +1325,12 @@
       }
     },
     methods: {
-      handler ({BMap, map}) {
-        console.log(BMap, map)
-        this.zoom = 15
-      }
+        handler ({BMap, map}) {
+            console.log("BMap",BMap, map)
+        },
+    },
+    mounted:{
+
     }
   }
 </script>
