@@ -6,7 +6,7 @@
 
         <div v-for="autoform, i in lightformlist" :key="i" class="formlist">
           <el-form :model="autoform" ref="autoform" label-position="left" label-width="180px" :rules="rules"
-            :disabled="autoforbid">
+            :disabled="autoforbid||ifguest">
             <el-form-item label="时间段" required>
               <el-col :span="8">
                 <el-form-item prop="starttime">
@@ -33,7 +33,7 @@
               </el-col>
             </el-form-item>
             <el-form-item label="控制模式" prop="controltype">
-              <el-radio-group v-model="autoform.controltype">
+              <el-radio-group v-model="autoform.controltype" disabled>
                 <el-radio label="1">一对一</el-radio>
                 <el-radio label="2">一对二</el-radio>
                 <el-radio label="3">一对三</el-radio>
@@ -47,19 +47,24 @@
               <el-input placeholder="范围2-2500，2500是500ms，1800是300ms，2是100ms,根据测试的时间延迟计算"
                 v-model.number="autoform.sensetime" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="高亮度低亮度占比" prop="lowhigh">
-              <div class="lowhigh">
-                <el-slider v-model="autoform.lowhigh" :marks="marks"></el-slider>
+            <el-form-item label="高亮度" prop="high">
+              <div class="high">
+                <el-slider v-model="autoform.high" :marks="marks"></el-slider>
+              </div>
+            </el-form-item>
+            <el-form-item label="低亮度" prop="low">
+              <div class="low">
+                <el-slider v-model="autoform.low" :marks="marks"></el-slider>
               </div>
             </el-form-item>
           </el-form>
           <div class="delete">
-            <el-button v-if="i != 0" type="danger" size="mini" @click="handDel(i)" :disabled="autoforbid">删除</el-button>
+            <el-button v-if="i != 0" type="danger" size="mini" @click="handDel(i)" :disabled="autoforbid||ifguest">删除</el-button>
           </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button type="success" @click="handleAdd" :disabled="autoforbid">新增时段设置</el-button>
-          <el-button type="primary" @click="handleAuto" :disabled="autoforbid">确 定</el-button>
+          <el-button type="success" @click="handleAdd" :disabled="autoforbid||ifguest">新增时段设置</el-button>
+          <el-button type="primary" @click="handleAuto" :disabled="autoforbid||ifguest">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -93,26 +98,29 @@ export default {
         {
           endtime: "",
           starttime: "",
-          controltype: "",
+          controltype: "1",
           closetime: "",
           sensetime: "",
-          lowhigh: 0
+          low: 0,
+          hight:0
         },
         {
           endtime: "",
           starttime: "",
-          controltype: "",
+          controltype: "1",
           closetime: "",
           sensetime: "",
-          lowhigh: 0
+          high: 0,
+          low:0
         }
       ],
       // 时间选择之间的占位
       autoforbid: false,
       ifAuto: false,
+      ifguest:true,
       autoform1: {
         // delay:null,
-        lowhigh: null,
+        high: null,
         sensetime: null,
         closetime: null,
         controltype: null,
@@ -120,15 +128,18 @@ export default {
         endtime: null
       },
       marks: {
-        0: "低",
-        100: "高"
+        0: "0",
+        100: "100"
       },
 
 
       rules: {
         endtime: [{ required: true, message: "请选择结束时间", trigger: "change" }],
         starttime: [{ required: true, message: "请选择开始时间", trigger: "change" }],
-        lowhigh: [
+        high: [
+          { required: true, trigger: "blur" }
+        ],
+        low: [
           { required: true, trigger: "blur" }
         ],
         // 感知时间2-2500，进行数字校验
@@ -157,7 +168,8 @@ export default {
     handleConcel() {
       for (let i = 0; i < this.$refs['autoform'].length; i++) {
         this.$refs['autoform'][i].resetFields()
-        this.$refs['autoform'][i]['lowhigh']=0
+        this.$refs['autoform'][i]['high']=0
+        this.$refs['autoform'][i]['low']=0
       }
 
     },
@@ -168,10 +180,11 @@ export default {
       this.lightformlist.push({
         endtime: "",
         starttime: "",
-        controltype: "",
+        controltype: "1",
         closetime: "",
         sensetime: "",
-        lowhigh: 0
+        high: 0,
+        low:0
       })
 
     },
@@ -201,14 +214,11 @@ export default {
     async initAuto(){
       const resp=await this.$http.get('/get_advanced_setting')
       this.lightformlist=resp.data
-      console.log("resp",resp.data);
-      console.log('this.lightformlist',this.lightformlist);
 
     },
     handleAuto() {
       let that = this
       let validlength = 0
-      console.log("this.lightformlist", this.lightformlist);
       for (let i = 0; i < this.$refs['autoform'].length; i++) {
         this.$refs['autoform'][i].validate((valid) => {
           if (valid) {
@@ -255,13 +265,17 @@ export default {
     },
     ifGuest() {
       if (window.sessionStorage.getItem('username') == 'guestMode') {
-        this.autoforbid = true
+        this.ifguest = true
+      }else{
+        this.ifguest = false
+        
       }
     }
   },
   mounted() {
     this.ifGuest()
     this.initAuto()
+
   },
   created() { }
 };
@@ -272,6 +286,11 @@ export default {
 /* 宽高分别对应纵向滚动条和横向滚动条的宽度 */
 ::-webkit-scrollbar {
   display: none;
+}
+.el-slider__marks-text{
+  width:50px;
+  text-align: center;
+
 }
 
 .auto_container {
@@ -294,7 +313,8 @@ export default {
       color: #606266 !important
     }
 
-    .lowhigh {
+    .high,
+    .low{
       width: 98%;
       padding-right: 202px;
     }

@@ -74,7 +74,7 @@ methods:{
         grid: {
           left: "3%",
           right: "10%",
-          bottom: "15%",
+          bottom: "20%",
           containLabel: true
         },
         xAxis: [
@@ -82,6 +82,7 @@ methods:{
             name: "月能耗量(度)",
             type: "category",
             nameGap: 40,
+            offset: 5,
             boundaryGap: false,
             nameLocation: "center",
             nameTextStyle: {
@@ -101,6 +102,8 @@ methods:{
           {
             name: "度",
             // offset:,
+            offset: 15,
+            nameGap: 25,
             nameTextStyle: {
               color: '#fff',
               fontSize:20
@@ -210,7 +213,7 @@ mounted(){
   align-items: center;
   .alert_energy{
     width:60%;
-    height:70%;
+    height:80%;
     box-sizing: border-box;
     .alert_content{
       padding:20px;

@@ -1,14 +1,14 @@
 <template>
-  <div class="energy_container" z-index="20">
+  <div class="video_container" z-index="20">
     
-      <div class="alert_energy" z-index="22"> 
-              <div class="alert_content">
+      <!-- <div class="alert_energy" z-index="22">  -->
+              <div class="video_content">
                  <div class="videobox">
                   <video id="video" controls></video>
 
                  </div>
               </div>
-      </div>
+      <!-- </div> -->
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 /* 整个滚动条 */
 /* 宽高分别对应纵向滚动条和横向滚动条的宽度 */
 ::-webkit-scrollbar {
@@ -67,8 +67,8 @@ export default {
         overflow: auto;
         text-align:center;
         .videobox{
-          width:500px;
-          height:500px;
+          width:200px;
+          height:200px;
           #video{
             width:100%;
             height:100%;

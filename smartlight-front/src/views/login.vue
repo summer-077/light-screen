@@ -16,8 +16,8 @@
             <span class="top"></span>
             <span class="bottom"></span>
         </div>
-        <div class="btn" @click="handleLogin">登录</div>
-        <div class="btn_skip" @click="handleSkip">游客模式</div>
+        <div class="btn" @click="handleLogin">管理登录</div>
+        <div class="btn_skip" @click="handleSkip">游客登录</div>
     </div>
     </div>
 </template>
@@ -42,11 +42,10 @@
     },
     methods: {
         handleLogin() {
-            let that=this
-            if(that.loginForm.username=='lion'&&that.loginForm.password=='smartlight@0701'){
+            let that = this;
+            if(that.loginForm.username=='lion' && that.loginForm.password=='smartlight@0701'){
                 sessionStorage.setItem("username",that.loginForm.username)
                 this.$message.success("登陆成功")
-                // this.$router.push("/")
                 window.location = '/'
             
             }else{
@@ -54,8 +53,15 @@
             }
         },
         handleSkip(){
-            sessionStorage.setItem("username","guestMode")
-            window.location = '/'
+            let that = this;
+            if(that.loginForm.username=='guest'&&that.loginForm.password=='smartlight@000'){
+                sessionStorage.setItem("username","guestMode")
+                this.$message.success("登陆成功")
+                window.location = '/'
+            }else{
+                this.$message.error("用户名或密码不正确")
+            }
+            
         }
     }
   };

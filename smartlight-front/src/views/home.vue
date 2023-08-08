@@ -3,7 +3,7 @@
         <dv-border-box-11 :titleWidth="500" class="border11" title="莱恩高科智慧路灯大数据平台" z-index="0">
             <div class="front" z-index="20">
 
-                <span class="logout" @click="handleLogout"> 退出</span>
+                <span class="logout" @click="handleLogout">退出</span>
                   <!-- <div class="mode_choose">
                   <el-tooltip class="item" effect="dark" :content="manual_content" placement="top-start">
                     <div class="manual_mode" @click="watch('manual')"
@@ -69,7 +69,7 @@ export default {
             street: [],//统计道路
             center: { lng: 113.989098, lat: 23.57457 },
             manual_content:'开启手动模式后，自动模式设置被禁用，点击手动进入页面，可以控制路灯的开关以及亮度调节',
-      auto_content:'开启高级模式后，手动模式被禁用，点击高级进入页面，高级模式下可以设置高亮度低亮度占比等参数',
+      auto_content:'开启自动模式后，手动模式被禁用，点击自动进入高级设置页面，可以设置高亮度低亮度占比等参数',
             mapStyle: {
                 styleJson: [{
                     "featureType": "land",
@@ -1445,7 +1445,8 @@ export default {
         handleLogout() {
             sessionStorage.clear()
             console.log("111111");
-            window.location = '/login'
+            this.$router.push('/login');
+            // window.location = '/login'
 
         }
     },
