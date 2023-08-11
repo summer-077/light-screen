@@ -45,15 +45,20 @@
                 <div class="loading">Loading...</div>
             </dv-loading>
         </div>
+        <div class="login" v-if="!iflogin">
+            <Login @handleLogin="handleLogin"></Login>
+        </div>
     </div>
 </template>
   
 <script >
 import MainView from '../views/MainView.vue'
+import Login from "./login.vue"
 export default {
-    components: { MainView },
+    components: { MainView,Login },
     data() {
         return {
+            iflogin:false,
             mapinit: null,
             light_socket: null,
             show: false,
@@ -1398,7 +1403,9 @@ export default {
         ifInWork(url){
             this.pointimg=url
         },
- 
+        handleLogin(type){
+            this.iflogin=type
+        },
         get_marker_list() {
             let that = this;
             // 默认值
@@ -1445,7 +1452,8 @@ export default {
         handleLogout() {
             sessionStorage.clear()
             console.log("111111");
-            this.$router.push('/login');
+            this.handleLogin(false)
+            // this.$router.push('/login');
             // window.location = '/login'
 
         }

@@ -1,24 +1,24 @@
 <template>
     <div class="login-container">
         <div class="login">
-        <div class="header">登录</div>
-        <div class="container">
-            <input type="text" placeholder="请输入用户名" v-model="loginForm.username">
-            <span class="left"></span>
-            <span class="right"></span>
-            <span class="top"></span>
-            <span class="bottom"></span>
+            <div class="header">登录</div>
+            <div class="container">
+                <input type="text" placeholder="请输入用户名" v-model="loginForm.username">
+                <span class="left"></span>
+                <span class="right"></span>
+                <span class="top"></span>
+                <span class="bottom"></span>
+            </div>
+            <div class="container1">
+                <input type="password" placeholder="请输入密码" v-model="loginForm.password">
+                <span class="left"></span>
+                <span class="right"></span>
+                <span class="top"></span>
+                <span class="bottom"></span>
+            </div>
+            <div class="btn" @click="handleLogin">管理登录</div>
+            <div class="btn_skip" @click="handleSkip">游客登录</div>
         </div>
-        <div class="container1">
-            <input type="password" placeholder="请输入密码" v-model="loginForm.password">
-            <span class="left"></span>
-            <span class="right"></span>
-            <span class="top"></span>
-            <span class="bottom"></span>
-        </div>
-        <div class="btn" @click="handleLogin">管理登录</div>
-        <div class="btn_skip" @click="handleSkip">游客登录</div>
-    </div>
     </div>
 </template>
   
@@ -46,8 +46,9 @@
             if(that.loginForm.username=='lion' && that.loginForm.password=='smartlight@0701'){
                 sessionStorage.setItem("username",that.loginForm.username)
                 this.$message.success("登陆成功")
-                window.location = '/'
-            
+                this.$emit('handleLogin',true)
+                // window.location = '/'
+                
             }else{
                 this.$message.error("用户名或密码不正确")
             }
@@ -57,7 +58,8 @@
             if(that.loginForm.username=='guest'&&that.loginForm.password=='smartlight@000'){
                 sessionStorage.setItem("username","guestMode")
                 this.$message.success("登陆成功")
-                window.location = '/'
+                this.$emit('handleLogin',true)
+                // window.location = '/'
             }else{
                 this.$message.error("用户名或密码不正确")
             }
@@ -75,6 +77,10 @@
     .login-container{
         width:100%;
         height:100%;
+        position:fixed;
+        left:0;
+        top:0px;
+        background-color: rgb(9, 18, 32);
     
     }
 
